@@ -10,16 +10,16 @@ makeTaxonomyFasta_RDP(fin, fdb, fout, compress = TRUE)
 \description{
 ## RDP Trainset 18
 path <- "~/Desktop/RDP/RDPClassifier_16S_trainsetNo18_rawtrainingdata"
-dada2:::makeTaxonomyFasta_RDP(file.path(path, "trainset18_062020.fa"), 
-    file.path(path, "trainset18_db_taxid.txt"), 
+dada2:::makeTaxonomyFasta_RDP(file.path(path, "trainset18_062020.fa"),
+    file.path(path, "trainset18_db_taxid.txt"),
     "~/tax/rdp_train_set_18.fa.gz")
 dada2:::tax.check("~/tax/rdp_train_set_18.fa.gz", "~/Desktop/ten_16s.100.fa")
 }
 \details{
 ## RDP Trainset 16
 path <- "~/Desktop/RDP/RDPClassifier_16S_trainsetNo16_rawtrainingdata"
-dada2:::makeTaxonomyFasta_RDP(file.path(path, "trainset16_022016.fa"), 
-    file.path(path, "trainset16_db_taxid.txt"), 
+dada2:::makeTaxonomyFasta_RDP(file.path(path, "trainset16_022016.fa"),
+    file.path(path, "trainset16_db_taxid.txt"),
     "~/tax/rdp_train_set_16.fa.gz")
 }
 \keyword{internal}

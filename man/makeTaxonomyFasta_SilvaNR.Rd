@@ -17,11 +17,11 @@ makeTaxonomyFasta_SilvaNR(
 \description{
 ## Silva release v138
 path <- "~/tax/Silva/v138"
-dada2:::makeTaxonomyFasta_SilvaNR(file.path(path, "SILVA_138_SSURef_NR99_tax_silva.fasta.gz"), 
-    file.path(path, "tax_slv_ssu_138.txt"), 
+dada2:::makeTaxonomyFasta_SilvaNR(file.path(path, "SILVA_138_SSURef_NR99_tax_silva.fasta.gz"),
+    file.path(path, "tax_slv_ssu_138.txt"),
     "~/Desktop/silva_nr99_v138_train_set.fa.gz")
-dada2:::makeTaxonomyFasta_SilvaNR(file.path(path, "SILVA_138_SSURef_NR99_tax_silva.fasta.gz"), 
-    file.path(path, "tax_slv_ssu_138.txt"), 
+dada2:::makeTaxonomyFasta_SilvaNR(file.path(path, "SILVA_138_SSURef_NR99_tax_silva.fasta.gz"),
+    file.path(path, "tax_slv_ssu_138.txt"),
     include.species=TRUE, "~/Desktop/silva_nr99_v138_wSpecies_train_set.fa.gz")
 }
 \keyword{internal}

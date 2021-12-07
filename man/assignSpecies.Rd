@@ -14,15 +14,15 @@ assignSpecies(
 )
 }
 \arguments{
-\item{seqs}{(Required). A character vector of the sequences to be assigned, or an object 
+\item{seqs}{(Required). A character vector of the sequences to be assigned, or an object
 coercible by \code{\link{getUniques}}.}
 
-\item{refFasta}{(Required). The path to the reference fasta file, or an 
+\item{refFasta}{(Required). The path to the reference fasta file, or an
 R connection. Can be compressed.
 This reference fasta file should be formatted so that the id lines correspond to the
 genus-species of the associated sequence:
-  
- >SeqID genus species  
+
+ >SeqID genus species
  ACGAATGTGAAGTAA......}
 
 \item{allowMultiple}{(Optional). Default FALSE.
@@ -31,12 +31,12 @@ By default only unambiguous identifications are return. If TRUE, a concatenated 
 of all exactly matched species is returned. If an integer is provided, multiple
 identifications up to that many are returned as a concatenated string.}
 
-\item{tryRC}{(Optional). Default FALSE. 
-If TRUE, the reverse-complement of each sequences will also be tested for exact matching 
+\item{tryRC}{(Optional). Default FALSE.
+If TRUE, the reverse-complement of each sequences will also be tested for exact matching
 to the reference sequences.}
 
 \item{n}{(Optional). Default \code{2000}.
-The number of sequences to perform assignment on at one time. 
+The number of sequences to perform assignment on at one time.
 This controls the peak memory requirement so that large numbers of sequences are supported.}
 
 \item{verbose}{(Optional). Default FALSE.
@@ -48,7 +48,7 @@ A two-column character matrix. Rows correspond to the provided sequences,
   was not classified at that level.
 }
 \description{
-\code{assignSpecies} uses exact matching against a reference fasta to identify the 
+\code{assignSpecies} uses exact matching against a reference fasta to identify the
 genus-species binomial classification of the input sequences.
 }
 \examples{
