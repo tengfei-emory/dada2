@@ -16,27 +16,27 @@ assignTaxonomy(
 )
 }
 \arguments{
-\item{seqs}{(Required). A character vector of the sequences to be assigned, or an object 
+\item{seqs}{(Required). A character vector of the sequences to be assigned, or an object
 coercible by \code{\link{getUniques}}.}
 
-\item{refFasta}{(Required). The path to the reference fasta file, or an 
+\item{refFasta}{(Required). The path to the reference fasta file, or an
 R connection Can be compressed.
 This reference fasta file should be formatted so that the id lines correspond to the
-taxonomy (or classification) of the associated sequence, and each taxonomic level is 
+taxonomy (or classification) of the associated sequence, and each taxonomic level is
 separated by a semicolon. Eg.
 
- >Kingom;Phylum;Class;Order;Family;Genus;   
+ >Kingom;Phylum;Class;Order;Family;Genus;
  ACGAATGTGAAGTAA......}
 
-\item{minBoot}{(Optional). Default 50. 
+\item{minBoot}{(Optional). Default 50.
 The minimum bootstrap confidence for assigning a taxonomic level.}
 
-\item{tryRC}{(Optional). Default FALSE. 
+\item{tryRC}{(Optional). Default FALSE.
 If TRUE, the reverse-complement of each sequences will be used for classification if it is a better match to the reference
 sequences than the forward sequence.}
 
 \item{outputBootstraps}{(Optional). Default FALSE.
-If TRUE, bootstrap values will be retained in an integer matrix. A named list containing the assigned taxonomies (named "taxa") 
+If TRUE, bootstrap values will be retained in an integer matrix. A named list containing the assigned taxonomies (named "taxa")
 and the bootstrap values (named "boot") will be returned. Minimum bootstrap confidence filtering still takes place,
 to see full taxonomy set minBoot=0}
 
@@ -45,7 +45,7 @@ The taxonomic levels being assigned. Truncates if deeper levels not present in
 training fasta.}
 
 \item{multithread}{(Optional). Default is FALSE.
-If TRUE, multithreading is enabled and the number of available threads is automatically determined.   
+If TRUE, multithreading is enabled and the number of available threads is automatically determined.
 If an integer is provided, the number of threads to use is set by passing the argument on to
 \code{\link{setThreadOptions}}.}
 
@@ -57,8 +57,8 @@ A character matrix of assigned taxonomies exceeding the minBoot level of
   bootstrapping confidence. Rows correspond to the provided sequences, columns to the
   taxonomic levels. NA indicates that the sequence was not consistently classified at
   that level at the minBoot threshhold.
-  
-  If outputBootstraps is TRUE, a named list containing the assigned taxonomies (named "taxa") 
+
+  If outputBootstraps is TRUE, a named list containing the assigned taxonomies (named "taxa")
   and the bootstrap values (named "boot") will be returned.
 }
 \description{

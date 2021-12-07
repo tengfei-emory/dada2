@@ -9,12 +9,12 @@ makeSpeciesFasta_Silva(fin, fout, compress = TRUE)
 }
 \description{
 ## Silva release v128
-dada2:::makeSpeciesFasta_Silva("~/Desktop/Silva/SILVA_128_SSURef_tax_silva.fasta.gz", 
+dada2:::makeSpeciesFasta_Silva("~/Desktop/Silva/SILVA_128_SSURef_tax_silva.fasta.gz",
     "~/tax/silva_species_assignment_v128.fa.gz")
 }
 \details{
 ## Silva release v132
-dada2:::makeSpeciesFasta_Silva("~/Desktop/Silva/SILVA_132_SSURef_tax_silva.fasta.gz", 
+dada2:::makeSpeciesFasta_Silva("~/Desktop/Silva/SILVA_132_SSURef_tax_silva.fasta.gz",
     "~/tax/silva_species_assignment_v132.fa.gz")
 
 Output: 313502 sequences with genus/species binomial annotation output.

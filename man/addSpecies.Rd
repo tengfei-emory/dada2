@@ -16,12 +16,12 @@ addSpecies(
 \arguments{
 \item{taxtab}{(Required). A taxonomic table, the output of \code{\link{assignTaxonomy}}.}
 
-\item{refFasta}{(Required). The path to the reference fasta file, or an 
+\item{refFasta}{(Required). The path to the reference fasta file, or an
 R connection. Can be compressed.
 This reference fasta file should be formatted so that the id lines correspond to the
 genus-species binomial of the associated sequence:
-  
- >SeqID genus species  
+
+ >SeqID genus species
  ACGAATGTGAAGTAA......}
 
 \item{allowMultiple}{(Optional). Default FALSE.
@@ -30,13 +30,13 @@ By default only unambiguous identifications are return. If TRUE, a concatenated 
 of all exactly matched species is returned. If an integer is provided, multiple
 identifications up to that many are returned as a concatenated string.}
 
-\item{tryRC}{(Optional). Default FALSE. 
+\item{tryRC}{(Optional). Default FALSE.
 If TRUE, the reverse-complement of each sequences will be used for classification if it is a better match to the reference
 sequences than the forward sequence.}
 
 \item{n}{(Optional). Default \code{1e5}.
-The number of records (reads) to read in and filter at any one time. 
-This controls the peak memory requirement so that very large fastq files are supported. 
+The number of records (reads) to read in and filter at any one time.
+This controls the peak memory requirement so that very large fastq files are supported.
 See \code{\link{FastqStreamer}} for details.}
 
 \item{verbose}{(Optional). Default FALSE.
@@ -48,11 +48,11 @@ A character matrix one column larger than input. Rows correspond to
   was not classified at that level.
 }
 \description{
-\code{addSpecies} wraps the \code{\link{assignSpecies}} function to assign genus-species 
+\code{addSpecies} wraps the \code{\link{assignSpecies}} function to assign genus-species
 binomials to the input sequences by exact matching against a reference fasta. Those binomials
-are then merged with the input taxonomic table with species annotations appended as an 
+are then merged with the input taxonomic table with species annotations appended as an
 additional column to the input table.
-Only species identifications where the genera in the input table and the binomial 
+Only species identifications where the genera in the input table and the binomial
 classification are consistent are included in the return table.
 }
 \examples{
