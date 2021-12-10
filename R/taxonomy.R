@@ -141,6 +141,7 @@ assignTaxonomy <- function(seqs, refFasta, minBoot=50, tryRC=FALSE, outputBootst
   taxes <- lapply(seq_along(taxes), function(i) taxes[[i]][boots[i,]>=minBoot])
   probs <- assignment$prob
   probs <- exp(probs)/rowSums(exp(probs))
+  boot_prob <- assignment$boot_prob
 
   colnames(probs) <- genus.unq
   rownames(probs) <- seqs
@@ -154,13 +155,21 @@ assignTaxonomy <- function(seqs, refFasta, minBoot=50, tryRC=FALSE, outputBootst
   }
   rownames(tax.out) <- seqs
   colnames(tax.out) <- taxLevels[1:ncol(tax.out)]
-  tax.out[tax.out=="_DADA2_UNSPECIFIED"] <- NA_character_
+  # tax.out[tax.out=="_DADA2_UNSPECIFIED"] <- NA_character_
   if(outputBootstraps){
       # Convert boots to integer matrix
       boots.out <- matrix(boots, nrow=length(seqs), ncol=td)
       rownames(boots.out) <- seqs
       colnames(boots.out) <- taxLevels[1:ncol(boots.out)]
-      list(tax=tax.out, boot=boots.out, prob = probs)
+
+      boot_prob <- array(boot_prob,dim=c(nrow(probs),ncol(probs),100),dimnames = list(seq = seqs, genus = genus.unq, BOOT = 1:100))
+      for (b in 1:100){
+        boot_prob[,,b] <- exp(boot_prob[,,b])/rowSums(exp(boot_prob[,,b] ))
+      }
+      # boot_prob <- apply(boot_prob,"BOOT",function(x) apply(x,1,function(y) exp(y)/rowSums(exp(y))))
+      # rownames(boot_prob) <- seqs
+      # colnames(boot_prob) <- as.vector(sapply(1:100,function(x) paste(x,genus.unq,sep="|")))
+      list(tax=tax.out, boot=boots.out, boot_tax=assignment$boot_tax, prob = probs, boot_prob = boot_prob)
   } else {
     list(tax=tax.out, prob = probs)
   }
