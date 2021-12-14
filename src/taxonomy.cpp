@@ -382,7 +382,7 @@ Rcpp::List C_assign_taxonomy2(std::vector<std::string> seqs, std::vector<std::st
   for(i=0;i<nseq;i++) {
     for(g=0;g<ngenus;g++) {
       for(j=0;j<NBOOT;j++){
-        rboot_logprob(i,j*NBOOT + g) = C_rboot_logprob[(i*NBOOT+j)*ngenus+g];
+        rboot_logprob(i,j*ngenus + g) = C_rboot_logprob[(i*NBOOT+j)*ngenus+g];
       }
     }
   }
