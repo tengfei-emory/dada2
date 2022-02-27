@@ -45,6 +45,7 @@ Collate:
     'RcppExports.R'
     'allClasses.R'
     'allPackage.R'
+    'assignrrnSeq.R'
     'chimeras.R'
     'dada.R'
     'errorModels.R'
