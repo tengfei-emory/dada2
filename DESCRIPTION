@@ -17,7 +17,7 @@ LazyLoad: yes
 Depends:
     R (>= 3.4.0),
     Rcpp (>= 0.12.0),
-    methods (>= 3.4.0)
+    methods (>= 3.4.0),
 Imports:
     Biostrings (>= 2.42.1),
     ggplot2 (>= 2.1.0),
@@ -45,6 +45,7 @@ Collate:
     'RcppExports.R'
     'allClasses.R'
     'allPackage.R'
+    'assignrrnSeq.R'
     'chimeras.R'
     'dada.R'
     'errorModels.R'

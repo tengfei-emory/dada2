@@ -154,9 +154,9 @@ char **nwalign_endsfree(const char *s1, size_t len1, const char *s2, size_t len2
 char **nwalign_endsfree_homo(const char *s1, size_t len1, const char *s2, size_t len2, int score[4][4], int gap_p, int gap_homo_p, int band);
 char **nwalign_vectorized2(const char *s1, size_t len1, const char *s2, size_t len2, int16_t match, int16_t mismatch, int16_t gap_p, int16_t end_gap_p, int band);
 char **nwalign_gapless(const char *s1, size_t len1, const char *s2, size_t len2);
-char **raw_align(Raw *raw1, Raw *raw2, int match, int mismatch, int gap_p, int homo_gap_p, bool use_kmers, 
+char **raw_align(Raw *raw1, Raw *raw2, int match, int mismatch, int gap_p, int homo_gap_p, bool use_kmers,
                  double kdist_cutoff, int band, bool vectorized_alignment, int SSE, bool gapless);
-Sub *sub_new(Raw *raw0, Raw *raw1, int match, int mismatch, int gap_p, int homo_gap_p, bool use_kmers, double kdist_cutoff, 
+Sub *sub_new(Raw *raw0, Raw *raw1, int match, int mismatch, int gap_p, int homo_gap_p, bool use_kmers, double kdist_cutoff,
              int band, bool vectorized_alignment, int SSE, bool gapless);
 Sub *al2subs(char **al);
 Sub *sub_copy(Sub *sub);

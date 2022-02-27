@@ -8,7 +8,6 @@
 using namespace Rcpp;
 using namespace std;
 
-
 // Gets kmer index
 // Returns -1 if non-ACGT base encountered
 int tax_kmer(const char *seq, unsigned int k) {
@@ -132,6 +131,7 @@ struct AssignParallel : public RcppParallel::Worker
   int *C_rboot;
   int *C_rboot_tax;
   float *C_logprob;
+  float *C_rboot_logprob;
 
   // destination assignment array
   int *C_rval;
@@ -145,11 +145,11 @@ struct AssignParallel : public RcppParallel::Worker
 
   // initialize with source and destination
   AssignParallel(std::vector<std::string> seqs, std::vector<std::string> rcs, float *lgk_probability,
-                 int *C_genusmat, double *C_unifs, int *C_rboot, int *C_rboot_tax, int *C_rval, float *C_logprob,
+                 int *C_genusmat, double *C_unifs, int *C_rboot, int *C_rboot_tax, int *C_rval, float *C_logprob, float *C_rboot_logprob,
                  unsigned int k, size_t n_kmers, size_t ngenus, size_t nlevel, unsigned int max_arraylen, bool try_rc)
     : seqs(seqs), rcs(rcs), lgk_probability(lgk_probability),
       C_genusmat(C_genusmat), C_unifs(C_unifs), C_rboot(C_rboot), C_rboot_tax(C_rboot_tax), C_rval(C_rval),
-      C_logprob(C_logprob), k(k), n_kmers(n_kmers), ngenus(ngenus), nlevel(nlevel), max_arraylen(max_arraylen), try_rc(try_rc) {}
+      C_logprob(C_logprob), C_rboot_logprob(C_rboot_logprob), k(k), n_kmers(n_kmers), ngenus(ngenus), nlevel(nlevel), max_arraylen(max_arraylen), try_rc(try_rc) {}
 
   // Rprintf("Classify the sequences.\n");
   void operator()(std::size_t begin, std::size_t end) {
@@ -211,6 +211,11 @@ struct AssignParallel : public RcppParallel::Worker
           tie(boot_g, boot_logprob) = get_best_genus(bootarray, &logp, (arraylen/8), n_kmers, ngenus, lgk_probability);
           // boot_g = output_boot_g["maxg"];
           C_rboot_tax[j*NBOOT+boot] = boot_g+1; // 1-index for return
+
+          for(g=0;g<ngenus;g++) {
+            C_rboot_logprob[(j*NBOOT+boot)*ngenus+g] = boot_logprob[g];
+          }
+
           for(i=0;i<nlevel;i++) {
             if(C_genusmat[boot_g*nlevel+i] == C_genusmat[max_g*nlevel+i]) {
               C_rboot[j*nlevel+i]++;
@@ -339,10 +344,12 @@ Rcpp::List C_assign_taxonomy2(std::vector<std::string> seqs, std::vector<std::st
       C_genusmat[i*nlevel + j] = genusmat(i,j);
     }
   }
-  float *C_logprob = (float *) calloc(nseq * ngenus, sizeof(float));
+  float *C_logprob = (float *) malloc(nseq * ngenus * sizeof(float));
+  float *C_rboot_logprob = (float *) malloc(nseq * NBOOT * ngenus * sizeof(float));
   Rcpp::NumericMatrix rlogprob(nseq, ngenus);
+  Rcpp::NumericMatrix rboot_logprob(nseq, ngenus*NBOOT);
 
-  AssignParallel assignParallel(seqs, rcs, lgk_probability, C_genusmat, C_unifs, C_rboot, C_rboot_tax, C_rval, C_logprob, k, n_kmers, ngenus, nlevel, max_arraylen, try_rc);
+  AssignParallel assignParallel(seqs, rcs, lgk_probability, C_genusmat, C_unifs, C_rboot, C_rboot_tax, C_rval, C_logprob, C_rboot_logprob, k, n_kmers, ngenus, nlevel, max_arraylen, try_rc);
   int INTERRUPT_BLOCK_SIZE=128;
   for(i=0;i<nseq;i+=INTERRUPT_BLOCK_SIZE) {
     j = i+INTERRUPT_BLOCK_SIZE;
@@ -372,16 +379,25 @@ Rcpp::List C_assign_taxonomy2(std::vector<std::string> seqs, std::vector<std::st
     }
   }
 
+  for(i=0;i<nseq;i++) {
+    for(g=0;g<ngenus;g++) {
+      for(j=0;j<NBOOT;j++){
+        rboot_logprob(i,j*ngenus + g) = C_rboot_logprob[(i*NBOOT+j)*ngenus+g];
+      }
+    }
+  }
+
   free(C_rboot);
   free(C_rboot_tax);
   free(C_unifs);
   free(C_rval);
   free(C_genusmat);
   free(C_logprob);
+  free(C_rboot_logprob);
   free(genus_num_plus1);
   free(kmer_prior);
   free(ref_kv);
   free(lgk_probability);
 
-  return(Rcpp::List::create(_["tax"]=rval, _["boot"]=rboot, _["boot_tax"]=rboot_tax, _["prob"]=rlogprob));
+  return(Rcpp::List::create(_["tax"]=rval, _["boot"]=rboot, _["boot_tax"]=rboot_tax, _["prob"]=rlogprob,_["boot_prob"]=rboot_logprob));
 }
