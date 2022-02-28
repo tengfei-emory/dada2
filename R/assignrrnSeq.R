@@ -107,7 +107,12 @@ assignrrnSeq <- function(seqs, rrndb, minBoot=50, tryRC=FALSE, outputBootstraps=
   taxes <- strsplit(bestHit, ";")
   taxes <- lapply(seq_along(taxes), function(i) taxes[[i]][boots[i,]>=minBoot])
   probs <- assignment$prob
-  probs <- (exp(probs+500))/(rowSums(exp(probs+500))) # add a constant 500 (to be canceled out) to log-posterior to avoid numerical issues.
+  # const <- min(-700-min(probs),700-max(probs))
+  const <- -700-apply(probs,1,min)
+  adjusted <- probs+const # add a constant (to be canceled out) to log-posterior to avoid numerical issues.
+  adjusted[adjusted > 700] = 700
+  probs <- (exp(adjusted))/(rowSums(exp(adjusted)))
+  # probs <- (exp(probs+const))/(rowSums(exp(probs+const))) # add a constant (to be canceled out) to log-posterior to avoid numerical issues.
   boot_prob <- assignment$boot_prob
 
   colnames(probs) <- genus.unq
@@ -132,7 +137,12 @@ assignrrnSeq <- function(seqs, rrndb, minBoot=50, tryRC=FALSE, outputBootstraps=
     boot_prob <- array(boot_prob,dim=c(nrow(probs),ncol(probs),100),dimnames = list(seq = seqs, genus = genus.unq, BOOT = 1:100))
     avg_boot_prob <- matrix(0,nrow=nrow(probs),ncol=ncol(probs))
     for (b in 1:100){
-      avg_boot_prob <- avg_boot_prob + exp(boot_prob[,,b]+500)/rowSums(exp(boot_prob[,,b]+500))
+      # const <- min(-700-min(boot_prob[,,b]),700-max(boot_prob[,,b]))
+      const <- -700-apply(boot_prob[,,b],1,min)
+      adjusted <- boot_prob[,,b]+const # add a constant (to be canceled out) to log-posterior to avoid numerical issues.
+      adjusted[adjusted > 700] = 700
+      avg_boot_prob <- avg_boot_prob + exp(adjusted)/rowSums(exp(adjusted))
+      # avg_boot_prob <- avg_boot_prob + exp(boot_prob[,,b]+const)/rowSums(exp(boot_prob[,,b]+const))
     }
     avg_boot_prob <- avg_boot_prob/100
     # boot_prob <- apply(boot_prob,"BOOT",function(x) apply(x,1,function(y) exp(y)/rowSums(exp(y))))
